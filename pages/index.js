@@ -1,5 +1,3 @@
-import {useState, useEffect} from "react";
-
 import {MainCard} from "../components/MainCard";
 import {ContentBox} from "../components/ContentBox";
 import {Header} from "../components/Header";
@@ -16,27 +14,29 @@ import params from "../config/config.json" with {type: "json"};
 
 export const App = () => {
     // const [cityInput, setCityInput] = useState(params.city);
-    const [triggerFetch, setTriggerFetch] = useState(true);
+    // const [triggerFetch, setTriggerFetch] = useState(true);
     const [weatherData, setWeatherData] = useState();
-    const [unitSystem, setUnitSystem] = useState(params.unit_system);
+    // const [unitSystem, setUnitSystem] = useState("metric");
 
     useEffect(() => {
         const getData = async () => {
-            try {
-                const res = await fetch("api/data", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(params.openmeteo),
-                });
-                const data = await res.json();
-                setWeatherData({...data});
-            } catch (error) {
-                console.log(error);
-            }
+            const res = await fetch("api/data", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(params.openmeteo),
+            });
+            const data = await res.json();
+            setWeatherData({...data});
             // setCityInput("");
         };
-        getData();
-    }, [triggerFetch]);
+        const r = getData();
+        const intervalId = setInterval(() => {
+            const r = getData();
+        }, 1000 * 60 * 60);
+        return () => {
+            clearInterval(intervalId);
+        }
+    }, []);
 
     // const changeSystem = () =>
     //     unitSystem === "metric"
@@ -50,12 +50,12 @@ export const App = () => {
                 country={weatherData.sys.country}
                 description={weatherData.weather[0].description}
                 iconName={weatherData.weather[0].icon}
-                unitSystem={unitSystem}
+                unitSystem={params.unit_system}
                 weatherData={weatherData}
             />
             <ContentBox>
                 <Header>
-                    <DateAndTime weatherData={weatherData} unitSystem={unitSystem}/>
+                    <DateAndTime weatherData={weatherData} unitSystem={params.unit_system}/>
                     {/*<Search*/}
                     {/*    placeHolder="Search a city..."*/}
                     {/*    value={cityInput}*/}
@@ -70,7 +70,7 @@ export const App = () => {
                     {/*    }}*/}
                     {/*/>*/}
                 </Header>
-                <MetricsBox weatherData={weatherData} unitSystem={unitSystem}/>
+                <MetricsBox weatherData={weatherData} unitSystem={params.unit_system}/>
                 {/*<UnitSwitch onClick={changeSystem} unitSystem={unitSystem} />*/}
             </ContentBox>
         </div>
