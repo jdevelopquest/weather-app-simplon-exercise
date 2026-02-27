@@ -7,6 +7,7 @@ Il s'agit d'un exercice proposé par Simplon.
 
 - **Migration d'API** : Passage de l'API OpenWeatherMap à l'API **Open-Meteo**.
 - **Configuration Localisée** : Suppression du moteur de recherche au profit d'un fichier de configuration (JSON).
+- **Rafraîchissement des données** : Les données météo sont mise à jour toutes les heures.
 
 ## Installation
 
