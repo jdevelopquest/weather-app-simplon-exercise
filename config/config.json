@@ -1,0 +1,23 @@
+{
+  "city": "Nantes",
+  "country": "FR",
+  "unit_system": "metric",
+  "openmeteo": {
+    "latitude": 47.2172,
+    "longitude": -1.5534,
+	"daily": ["sunrise", "sunset"],
+    "current": [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "is_day",
+      "weather_code",
+      "wind_speed_10m",
+      "wind_direction_10m"
+    ],
+    "timezone": "auto",
+    "wind_speed_unit": "ms",
+    "temperature_unit": "celsius",
+    "precipitation_unit": "mm"
+  }
+}
