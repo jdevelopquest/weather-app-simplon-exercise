@@ -17,6 +17,7 @@ export const MainCard = ({
             </h1>
             <p className={styles.description}>{description}</p>
             <Image
+                loading="eager"
                 width="300"
                 height="300"
                 src={`/icons/${iconName}.svg`}
