@@ -14,7 +14,7 @@ import styles from "../styles/Home.module.css";
 import params from "../config/config.json" with {type: "json"};
 
 export const App = () => {
-    // const [cityInput, setCityInput] = useState(params.city);
+    // const [cityInput, setCityInput] = useState("Riga);
     // const [triggerFetch, setTriggerFetch] = useState(true);
     const [weatherData, setWeatherData] = useState();
     // const [unitSystem, setUnitSystem] = useState("metric");
