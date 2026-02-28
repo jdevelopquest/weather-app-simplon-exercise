@@ -3,7 +3,24 @@ import openmeteoFormatToAppFormat from "../../services/openmeteoFormatToAppForma
 
 export default async function handler(req, res) {
     try {
-        const params = req.body;
+        const params = {
+            "latitude": req.body.latitude,
+            "longitude": req.body.longitude,
+            "daily": ["sunrise", "sunset"],
+            "current": [
+                "temperature_2m",
+                "relative_humidity_2m",
+                "apparent_temperature",
+                "is_day",
+                "weather_code",
+                "wind_speed_10m",
+                "wind_direction_10m"
+            ],
+            "timezone": "auto",
+            "wind_speed_unit": "ms",
+            "temperature_unit": "celsius",
+            "precipitation_unit": "mm"
+        };
 
         const url = "https://api.open-meteo.com/v1/forecast";
         const responses = await fetchWeatherApi(url, params);
