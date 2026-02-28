@@ -3,9 +3,10 @@ import openmeteoFormatToAppFormat from "../../services/openmeteoFormatToAppForma
 
 export default async function handler(req, res) {
     try {
-        const params = {
-            "latitude": req.body.latitude,
-            "longitude": req.body.longitude,
+        const params = req.body;
+        const openMeteoParams = {
+            "latitude": params.coordinates.latitude,
+            "longitude": params.coordinates.longitude,
             "daily": ["sunrise", "sunset"],
             "current": [
                 "temperature_2m",
@@ -23,7 +24,7 @@ export default async function handler(req, res) {
         };
 
         const url = "https://api.open-meteo.com/v1/forecast";
-        const responses = await fetchWeatherApi(url, params);
+        const responses = await fetchWeatherApi(url, openMeteoParams);
 
 // Process first location. Add a for-loop for multiple locations or weather models
         const response = responses[0];
@@ -40,6 +41,8 @@ export default async function handler(req, res) {
 
 // Note: The order of weather variables in the URL query and the indices below need to match!
         const openmeteoWeatherData = {
+            city: params.city,
+            country: params.country,
             utc_offset_seconds: utcOffsetSeconds,
             current: {
                 valid_at: Number(current.time()), // BigInt to Number
