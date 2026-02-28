@@ -1,9 +1,9 @@
 {
   "city": "Nantes",
+  "coordinates": {
+    "latitude": 47.21725,
+    "longitude": -1.55336
+  },
   "country": "FR",
-  "unit_system": "metric",
-  "openmeteo": {
-    "latitude": 47.2172,
-    "longitude": -1.5534
-  }
+  "unit_system": "metric"
 }
