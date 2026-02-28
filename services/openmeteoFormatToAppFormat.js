@@ -1,4 +1,3 @@
-import params from "../config/config.json" with {type: "json"};
 import getWeatherDescription from "./getWeatherDescription";
 import getWeatherIconName from "./getWeatherIconName";
 
@@ -47,13 +46,13 @@ export default (openmeteoWeatherData) => {
         sys: {
             type: undefined,
             id: undefined,
-            country: params.country,
+            country: openmeteoWeatherData.country,
             sunrise: openmeteoWeatherData.daily.sunrise,
             sunset: openmeteoWeatherData.daily.sunset
         },
         timezone: openmeteoWeatherData.utc_offset_seconds,
         id: undefined,
-        name: params.city,
+        name: openmeteoWeatherData.city,
         cod: undefined
     };
 }
