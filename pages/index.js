@@ -14,17 +14,24 @@ import styles from "../styles/Home.module.css";
 import params from "../config/config.json" with {type: "json"};
 
 export const App = () => {
-    // const [cityInput, setCityInput] = useState(params.city);
+    // const [cityInput, setCityInput] = useState("Riga);
     // const [triggerFetch, setTriggerFetch] = useState(true);
     const [weatherData, setWeatherData] = useState();
-    // const [unitSystem, setUnitSystem] = useState("metric");
+    const unitSystem = params.unit_system;
 
     useEffect(() => {
         const getData = async () => {
             const res = await fetch("api/data", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(params.openmeteo),
+                body: JSON.stringify({
+                    city: params.city,
+                    coordinates: {
+                        latitude: params.coordinates.latitude,
+                        longitude: params.coordinates.longitude,
+                    },
+                    country: params.country,
+                }),
             });
             const data = await res.json();
             setWeatherData({...data});
@@ -51,12 +58,12 @@ export const App = () => {
                 country={weatherData.sys.country}
                 description={weatherData.weather[0].description}
                 iconName={weatherData.weather[0].icon}
-                unitSystem={params.unit_system}
+                unitSystem={unitSystem}
                 weatherData={weatherData}
             />
             <ContentBox>
                 <Header>
-                    <DateAndTime weatherData={weatherData} unitSystem={params.unit_system}/>
+                    <DateAndTime weatherData={weatherData} unitSystem={unitSystem}/>
                     {/*<Search*/}
                     {/*    placeHolder="Search a city..."*/}
                     {/*    value={cityInput}*/}
