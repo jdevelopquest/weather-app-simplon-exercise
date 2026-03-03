@@ -49,7 +49,7 @@ export default async function handler(req, res) {
                 temperature_2m: current.variables(0).value(),
                 relative_humidity_2m: current.variables(1).value(),
                 apparent_temperature: current.variables(2).value(),
-                is_day: current.variables(3).value(),
+                is_day: current.variables(3).value() === 1, // Integer to Boolean
                 weather_code: current.variables(4).value(),
                 wind_speed_10m: current.variables(5).value(),
                 wind_direction_10m: current.variables(6).value(),
