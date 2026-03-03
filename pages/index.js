@@ -1,4 +1,5 @@
-import {useEffect, useState} from "react";import {MainCard} from "../components/MainCard";
+import {useEffect, useState} from "react";
+import {MainCard} from "../components/MainCard";
 
 import {ContentBox} from "../components/ContentBox";
 import {Header} from "../components/Header";
@@ -19,6 +20,8 @@ export const App = () => {
     const [weatherData, setWeatherData] = useState();
     const unitSystem = params.unit_system;
 
+    let isFirstFetch = true;
+
     useEffect(() => {
         const getData = async () => {
             const res = await fetch("api/data", {
@@ -37,7 +40,10 @@ export const App = () => {
             setWeatherData({...data});
             // setCityInput("");
         };
-        const r = getData();
+        if (isFirstFetch) {
+            isFirstFetch = false;
+            const r = getData();
+        }
         const intervalId = setInterval(() => {
             const r = getData();
         }, 1000 * 60 * 60);
