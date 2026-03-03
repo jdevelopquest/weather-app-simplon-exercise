@@ -20,8 +20,6 @@ export const App = () => {
     const [weatherData, setWeatherData] = useState();
     const unitSystem = params.unit_system;
 
-    let isFirstFetch = true;
-
     useEffect(() => {
         const getData = async () => {
             const res = await fetch("api/data", {
@@ -38,12 +36,10 @@ export const App = () => {
             });
             const data = await res.json();
             setWeatherData({...data});
+            console.log("Set data at " + new Date().toLocaleTimeString());
             // setCityInput("");
         };
-        if (isFirstFetch) {
-            isFirstFetch = false;
-            const r = getData();
-        }
+        const r = getData();
         const intervalId = setInterval(() => {
             const r = getData();
         }, 1000 * 60 * 60);
