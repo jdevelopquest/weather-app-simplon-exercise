@@ -24,35 +24,39 @@ export default async function handler(req, res) {
         };
 
         const url = "https://api.open-meteo.com/v1/forecast";
-        const responses = await fetchWeatherApi(url, openMeteoParams);
+        const responses = await fetchWeatherApi(
+            url, openMeteoParams,
+            3, 0.2, 2,
+            // Abort the request after 59 minutes to prevent it from overlapping with the next scheduled refresh (every 60 minutes).
+            {signal: AbortSignal.timeout(1000 * 60 * 59)});
 
-// Process first location. Add a for-loop for multiple locations or weather models
+        // Process first location. Add a for-loop for multiple locations or weather models
         const response = responses[0];
 
-// Attributes for timezone and location
+        // Attributes for timezone and location
         const utcOffsetSeconds = response.utcOffsetSeconds();
 
         const current = response.current();
         const daily = response.daily();
 
-// Define Int64 variables so they can be processed accordingly
+        // Define Int64 variables so they can be processed accordingly
         const sunrise = daily.variables(0);
         const sunset = daily.variables(1);
 
-// Note: The order of weather variables in the URL query and the indices below need to match!
+        // Note: The order of weather variables in the URL query and the indices below need to match!
         const openmeteoWeatherData = {
             city: params.city,
             country: params.country,
             utc_offset_seconds: utcOffsetSeconds,
             current: {
                 valid_at: Number(current.time()), // BigInt to Number
-                temperature_2m: current.variables(0).value(),
-                relative_humidity_2m: current.variables(1).value(),
-                apparent_temperature: current.variables(2).value(),
+                temperature_2m: Number(current.variables(0).value()),
+                relative_humidity_2m: Number(current.variables(1).value()),
+                apparent_temperature: Number(current.variables(2).value()),
                 is_day: current.variables(3).value() === 1, // Integer to Boolean
-                weather_code: current.variables(4).value(),
-                wind_speed_10m: current.variables(5).value(),
-                wind_direction_10m: current.variables(6).value(),
+                weather_code: Number(current.variables(4).value()),
+                wind_speed_10m: Number(current.variables(5).value()),
+                wind_direction_10m: Number(current.variables(6).value()),
             },
             daily: {
                 sunrise: Number(sunrise.valuesInt64(0)),
@@ -62,6 +66,10 @@ export default async function handler(req, res) {
 
         res.status(200).json(openmeteoFormatToAppFormat(openmeteoWeatherData));
     } catch (error) {
-        res.status(500).json({message: "Cloudy with a chance of technical difficulties."});
+        if (error.name === "TimeoutError") {
+            return res.status(408).json({message: "Timeout alert: the forecast is taking a rain check."});
+        } else {
+            res.status(500).json({message: "Cloudy with a chance of technical difficulties."});
+        }
     }
 }

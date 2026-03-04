@@ -34,9 +34,9 @@ export const App = () => {
                     country: params.country,
                 }),
             });
+            // todo: décider de maintenir à l'affichage les anciennes données si la mise à jour ce celle-ci échouée
             const data = await res.json();
             setWeatherData({...data});
-            console.log("Set data at " + new Date().toLocaleTimeString());
             // setCityInput("");
         };
         const r = getData();
